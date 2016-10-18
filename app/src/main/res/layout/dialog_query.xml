@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="10dp"
+    >
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        >
+        <ListView
+            android:id="@+id/query_lv"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    <EditText
+        android:id="@+id/query_et_name"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/item_contact_iv_avatar"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:hint="输入姓名"
+        />
+    </FrameLayout>
+    <Button
+        android:id="@+id/query_btn_query"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/item_contact_iv_avatar"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/item_contact_tv_name"
+        android:text="查找"
+        />
+
+</LinearLayout>
