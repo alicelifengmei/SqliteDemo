@@ -44,18 +44,21 @@ public class DeleteAndUpdateContactActivity extends Activity {
                 String name = etName.getText().toString();
                 String phoneNum = etPhoneNum.getText().toString();
                 if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(phoneNum)) {
-                    ContactModel contactModel = new ContactModel();
                     contactModel.setName(name);
                     contactModel.setPhoneNum(phoneNum);
-                    dbHelper.update(contactModel);
-                    setResult(RESULT_OK);
-                    finish();
+                    int rowNum = dbHelper.update(contactModel);
+                    if(rowNum > -1){
+                        setResult(RESULT_OK);
+                        finish();
+                    }else{
+                        Toast.makeText(DeleteAndUpdateContactActivity.this, "联系人修改失败", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(DeleteAndUpdateContactActivity.this, "姓名和电话号码不能为空", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        btnUpdate.setOnClickListener(new View.OnClickListener() {
+        btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DbHelper dbHelper = new DbHelper(DeleteAndUpdateContactActivity.this);
@@ -65,7 +68,7 @@ public class DeleteAndUpdateContactActivity extends Activity {
                     setResult(RESULT_OK);
                     finish();
                 }else{
-                    Toast.makeText(DeleteAndUpdateContactActivity.this, "；联系人删除失败", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DeleteAndUpdateContactActivity.this, "联系人删除失败", Toast.LENGTH_SHORT).show();
                 }
             }
         });
