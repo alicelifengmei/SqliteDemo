@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.administrator.sqlitedemo.R;
+import com.example.administrator.sqlitedemo.adapter.MyBaseAdapter;
 import com.example.administrator.sqlitedemo.dbmanager.DbHelper;
 import com.example.administrator.sqlitedemo.model.ContactModel;
 
@@ -33,7 +34,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     private List<ContactModel> contactModels;
     private ContactsAdapter contactsAdapter;
     private DbHelper dbHelper;
-    /**查询联系人结果列表*/
+    /**
+     * 查询联系人结果列表
+     */
     List<ContactModel> resultContactModels;
 
     @Override
@@ -49,15 +52,46 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         btnAdd = (Button) findViewById(R.id.main_btn_add);
         btnQuery = (Button) findViewById(R.id.main_btn_query);
         lv = (ListView) findViewById(R.id.main_lv);
-        contactsAdapter = new ContactsAdapter();
-        lv.setAdapter(contactsAdapter);
+//        contactsAdapter = new ContactsAdapter();
+//        lv.setAdapter(contactsAdapter);
+        lv.setAdapter(myBaseAdapter);
     }
+
+    private MyBaseAdapter<ContactModel> myBaseAdapter = new MyBaseAdapter<ContactModel>() {
+        @Override
+        public View setView(View convertView, int position, List<ContactModel> datalist) {
+            ViewHolder holder;
+            if (convertView == null) {
+                holder = new ViewHolder();
+                convertView = LayoutInflater.from(MainActivity.this).inflate(R.layout.item_main_contact, null);
+                holder.ivAvatar = (ImageView) convertView.findViewById(R.id.item_contact_iv_avatar);
+                holder.tvName = (TextView) convertView.findViewById(R.id.item_contact_tv_name);
+                holder.tvPhoneNum = (TextView) convertView.findViewById(R.id.item_contact_tv_phonenum);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+            ContactModel contactModel = datalist.get(position);
+            if (contactModel != null) {
+                String name = contactModel.getName();
+                String phoneNum = contactModel.getPhoneNum();
+                if (!TextUtils.isEmpty(name)) {
+                    holder.tvName.setText(name);
+                }
+                if (!TextUtils.isEmpty(phoneNum)) {
+                    holder.tvPhoneNum.setText(phoneNum);
+                }
+            }
+            return convertView;
+        }
+    };
 
     private void initData() {
         dbHelper = new DbHelper(this);
         contactModels = dbHelper.getAllContacts();
         if (contactModels != null) {
-            contactsAdapter.setData(contactModels);
+            myBaseAdapter.setData(contactModels);
+//            contactsAdapter.setData(contactModels);
         }
     }
 
@@ -93,7 +127,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                             etName.setVisibility(View.GONE);
                             lv.setVisibility(View.VISIBLE);
                             resultAdapter.setData(resultContactModels);
-                        }else{
+                        } else {
                             Toast.makeText(MainActivity.this, "查无此人,请重新输入", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -126,7 +160,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                         dbHelper = new DbHelper(this);
                     }
                     contactModels = dbHelper.getAllContacts();
-                    contactsAdapter.setData(contactModels);
+                    myBaseAdapter.setData(contactModels);
+//                    contactsAdapter.setData(contactModels);
                     break;
             }
         }
